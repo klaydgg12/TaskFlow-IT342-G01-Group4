@@ -27,7 +27,7 @@ Project setup instructions will be added once development starts.
 | Name                       | Role                                                             | CIT-U Email                | GitHub                                     |
 | -------------------------- | ---------------------------------------------------------------- | -------------------------- | ------------------------------------------ |
 | **Clyde Nixon Jumawan**    | UI/UX - Frontend Developer / Backend Developer                   | clydenixon.jumawan@cit.edu | [@klaydgg12](https://github.com/klaydgg12) |
-| **Eupena P. Felix**        | Project Manager - UI/UX - Frontend Developer / Backend Developer | eupena.felix@cit.edu       | [@username](https://github.com/)           |
+| **Eupena P. Felix**        | Project Manager - UI/UX - Frontend Developer / Backend Developer | eupena.felix@cit.edu       | [@saluspupuli-dotcom](https://github.com/saluspupuli-dotcom)           |
 | **Jake Laurence Y. Zafra** | UI/UX - Frontend Developer / Backend Developer                   | jake.zafra@cit.edu         | [@username](https://github.com/)           |
 
 ---
