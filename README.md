@@ -7,12 +7,12 @@ This project will include a backend, web app, and mobile app as part of our IT34
 
 ##  Tech Stack (Planned)
 
-- **Backend:** Spring Boot (Java)
-- **Web Application:** ReactJS
-- **Mobile Application:** Kotlin (Android)
-- **Database:** MySQL
+- **Backend:** Spring Boot (Java) - v3.3.0
+- **Web Application:** ReactJS - v18.3.1
+- **Mobile Application:** Kotlin (Android) - v1.9.0
+- **Database:** MySQL - v8.0
 - **Authentication:** Google OAuth 2.0
-- **Version Control:** Git & GitHub
+- **Version Control:** Git & GitHub - Git v2.44.0
 
 ---
 
