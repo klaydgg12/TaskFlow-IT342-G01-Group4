@@ -1,11 +1,11 @@
-# 🗂️ TaskFlow
+#  TaskFlow
 
 **TaskFlow** is a planned task management system designed to help users organize, monitor, and complete their tasks efficiently.  
 This project will include a backend, web app, and mobile app as part of our IT342 final project.
 
 ---
 
-## 🧰 Tech Stack (Planned)
+##  Tech Stack (Planned)
 
 - **Backend:** Spring Boot (Java)
 - **Web Application:** ReactJS
@@ -16,13 +16,13 @@ This project will include a backend, web app, and mobile app as part of our IT34
 
 ---
 
-## ⚙️ Setup Instructions (To be updated)
+##  Setup Instructions (To be updated)
 
 Project setup instructions will be added once development starts.
 
 ---
 
-## 👨‍💻 Team Members
+##  Team Members
 
 | Name                       | Role                                                             | CIT-U Email                | GitHub                                     |
 | -------------------------- | ---------------------------------------------------------------- | -------------------------- | ------------------------------------------ |
