@@ -16,9 +16,50 @@ This project will include a backend, web app, and mobile app as part of our IT34
 
 ---
 
-##  Setup Instructions (To be updated)
+##  Setup Instructions
 
-Project setup instructions will be added once development starts.
+### 1. Prerequisites
+- Java 17+
+- Maven 3.8+
+- Node.js 18+ (with npm)
+- MySQL 8 (you can manage it with MySQL Workbench)
+
+### 2. Database
+```sql
+CREATE DATABASE IF NOT EXISTS taskflowdb
+  CHARACTER SET utf8mb4
+  COLLATE utf8mb4_unicode_ci;
+```
+Update `backend/src/main/resources/application.properties` with your MySQL username/password if they differ from the defaults.
+
+### 3. Backend (Spring Boot)
+```bash
+cd backend
+mvn clean package
+mvn spring-boot:run
+```
+The API will be available at `http://localhost:8080` and will automatically apply schema updates to `taskflowdb`.
+
+> 🆕 **Google OAuth:** Set `google.oauth.client-id` in `backend/src/main/resources/application.properties` to your Google Client ID. This is required for Google sign-in to work.
+
+### 4. Frontend (Vite + React)
+Create a `.env` inside `web/`:
+```
+VITE_API_BASE=http://localhost:8080
+VITE_GOOGLE_CLIENT_ID=your-google-client-id.apps.googleusercontent.com
+```
+Then install and run:
+```bash
+cd web
+npm install
+npm run dev
+```
+The web client expects the backend to be running and will call the configured `VITE_API_BASE`.
+
+### 5. Admin Controls & Authentication
+- Deactivating a user in the admin panel immediately prevents them from logging in (including Google sign-in).
+- Admins can promote/demote roles directly from the dropdown in the admin panel.
+- Google sign-in is available on the sign-in page and automatically provisions accounts for first-time Google users.
 
 ---
 

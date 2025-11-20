@@ -20,6 +20,39 @@ interface User {
   role: string
   isActive: boolean
   createdAt: string
+  status?: string
+}
+
+interface AuditLog {
+  id: number
+  action: string
+  entityType: string
+  entityId: number
+  description: string
+  sourceIp?: string
+  createdAt: string
+  user: {
+    id: number
+    fullName: string
+    email: string
+  }
+}
+
+interface RoleHistoryEntry {
+  id: number
+  user: {
+    id: number
+    fullName: string
+    email: string
+  }
+  oldRole: string
+  newRole: string
+  changedBy?: {
+    id: number
+    fullName: string
+    email: string
+  }
+  changedAt: string
 }
 
 type TabType = 'users' | 'audit' | 'history'
@@ -28,8 +61,12 @@ export default function AdminPage() {
   const navigate = useNavigate()
   const [activeTab, setActiveTab] = useState<TabType>('users')
   const [users, setUsers] = useState<User[]>([])
-  const [currentUser, setCurrentUser] = useState({ name: '', role: 'Admin' })
+  const [auditLogs, setAuditLogs] = useState<AuditLog[]>([])
+  const [roleHistory, setRoleHistory] = useState<RoleHistoryEntry[]>([])
+  const [currentUser, setCurrentUser] = useState({ name: '', role: 'Admin', id: 0 })
   const [loading, setLoading] = useState(true)
+  const [loadingAudit, setLoadingAudit] = useState(false)
+  const [loadingHistory, setLoadingHistory] = useState(false)
 
   // Load admin user and fetch all users
   useEffect(() => {
@@ -46,7 +83,7 @@ export default function AdminPage() {
       return
     }
 
-    setCurrentUser({ name: user.fullName, role: 'Admin' })
+    setCurrentUser({ name: user.fullName, role: 'Admin', id: user.id })
     
     // Fetch all users
     fetchUsers()
@@ -82,24 +119,94 @@ export default function AdminPage() {
     events24h: 4,
   }
 
-  const toggleUserStatus = async (userId: number) => {
-    const user = users.find(u => u.id === userId)
-    if (!user) return
-
+  const updateUser = async (userId: number, payload: Record<string, unknown>) => {
     try {
-      await fetch(`${API_BASE}/api/users/update/${userId}`, {
+      const response = await fetch(`${API_BASE}/api/users/update/${userId}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          ...user,
-          isActive: !user.isActive,
+          ...payload,
+          updatedById: currentUser.id,
         }),
       })
-      fetchUsers()
+      const data = await response.json()
+      if (response.ok && data.success && data.user) {
+        setUsers((prev) => prev.map((user) => (user.id === userId ? data.user : user)))
+      } else {
+        console.error('Failed to update user:', data.message)
+      }
     } catch (error) {
-      console.error('Failed to toggle user status:', error)
+      console.error('Failed to update user:', error)
     }
   }
+
+  const toggleUserStatus = (userId: number, isActive: boolean) => {
+    updateUser(userId, { isActive: !isActive })
+  }
+
+  const handleRoleChange = (userId: number, newRole: string) => {
+    updateUser(userId, { role: newRole })
+  }
+
+  const fetchAuditLogs = async () => {
+    setLoadingAudit(true)
+    try {
+      const response = await fetch(`${API_BASE}/api/audit/logs`)
+      const data = await response.json()
+      if (response.ok && data.success) {
+        setAuditLogs(data.logs || [])
+      }
+    } catch (error) {
+      console.error('Failed to fetch audit logs:', error)
+    } finally {
+      setLoadingAudit(false)
+    }
+  }
+
+  const fetchRoleHistory = async () => {
+    setLoadingHistory(true)
+    try {
+      const response = await fetch(`${API_BASE}/api/audit/role-history`)
+      const data = await response.json()
+      if (response.ok && data.success) {
+        setRoleHistory(data.history || [])
+      }
+    } catch (error) {
+      console.error('Failed to fetch role history:', error)
+    } finally {
+      setLoadingHistory(false)
+    }
+  }
+
+  useEffect(() => {
+    if (activeTab === 'audit' && auditLogs.length === 0 && !loadingAudit) {
+      fetchAuditLogs()
+    }
+    if (activeTab === 'history' && roleHistory.length === 0 && !loadingHistory) {
+      fetchRoleHistory()
+    }
+  }, [activeTab])
+
+  const getAuditBadge = (action: string) => {
+    switch (action) {
+      case 'ROLE_CHANGE':
+        return { label: 'Role Change', style: styles.badgePurple }
+      case 'LOGIN_SUCCESS':
+        return { label: 'Login Success', style: styles.badgeGreen }
+      case 'LOGIN_FAILED':
+        return { label: 'Login Failed', style: styles.badgeRed }
+      case 'USER_DEACTIVATED':
+        return { label: 'User Deactivated', style: styles.badgeRed }
+      case 'USER_REACTIVATED':
+        return { label: 'User Reactivated', style: styles.badgeBlue }
+      case 'TASK_CREATED':
+        return { label: 'Task Created', style: styles.badgeIndigo }
+      default:
+        return { label: action, style: styles.badgeNeutral }
+    }
+  }
+
+  const formatDateTime = (value: string) => new Date(value).toLocaleString()
 
   const handleLogout = () => {
     localStorage.removeItem('user')
@@ -258,7 +365,14 @@ export default function AdminPage() {
                     <div className={styles.tableCell} style={{ width: '185.113px' }}>
                       <div className={styles.roleSelect}>
                         <img alt={user.role} src={user.role === 'ADMIN' ? imgIcon6 : imgIcon3} />
-                        <span>{user.role}</span>
+                        <select
+                          value={user.role}
+                          onChange={(e) => handleRoleChange(user.id, e.target.value)}
+                          className={styles.roleDropdown}
+                        >
+                          <option value="USER">USER</option>
+                          <option value="ADMIN">ADMIN</option>
+                        </select>
                         <img alt="Dropdown" src={imgIcon4} />
                       </div>
                     </div>
@@ -279,7 +393,7 @@ export default function AdminPage() {
                         className={`${styles.actionButton} ${
                           user.isActive ? styles.deactivateBtn : styles.activateBtn
                         }`}
-                        onClick={() => toggleUserStatus(user.id)}
+                        onClick={() => toggleUserStatus(user.id, user.isActive)}
                       >
                         <img
                           alt="Action"
@@ -300,11 +414,37 @@ export default function AdminPage() {
           <div className={styles.panel}>
             <div className={styles.panelHeader}>
               <h3 className={styles.panelTitle}>Audit Logs</h3>
-              <p className={styles.panelSubtitle}>System activity and user actions</p>
+              <p className={styles.panelSubtitle}>Security and system event monitoring</p>
             </div>
-            <div className={styles.emptyState}>
-              <p>Audit logs will be displayed here</p>
-            </div>
+            {loadingAudit ? (
+              <div className={styles.emptyState}>
+                <p>Loading audit logs...</p>
+              </div>
+            ) : (
+              <div className={styles.auditList}>
+                {auditLogs.map((log) => {
+                  const badge = getAuditBadge(log.action)
+                  return (
+                    <div key={log.id} className={styles.auditItem}>
+                      <div className={styles.auditHeader}>
+                        <span className={`${styles.auditBadge} ${badge.style}`}>{badge.label}</span>
+                        <span className={styles.auditTime}>{formatDateTime(log.createdAt)}</span>
+                      </div>
+                      <div className={styles.auditDescription}>{log.description}</div>
+                      <div className={styles.auditMeta}>
+                        <span>User: <strong>{log.user.fullName}</strong></span>
+                        {log.sourceIp && <span>IP: {log.sourceIp}</span>}
+                      </div>
+                    </div>
+                  )
+                })}
+                {auditLogs.length === 0 && (
+                  <div className={styles.emptyState}>
+                    <p>No audit logs found.</p>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         )}
 
@@ -315,9 +455,33 @@ export default function AdminPage() {
               <h3 className={styles.panelTitle}>Role History</h3>
               <p className={styles.panelSubtitle}>Changes to user roles and permissions</p>
             </div>
-            <div className={styles.emptyState}>
-              <p>Role history will be displayed here</p>
-            </div>
+            {loadingHistory ? (
+              <div className={styles.emptyState}>
+                <p>Loading role history...</p>
+              </div>
+            ) : (
+              <div className={styles.roleHistoryList}>
+                {roleHistory.map((entry) => (
+                  <div key={entry.id} className={styles.roleHistoryItem}>
+                    <div className={styles.roleHistoryUser}>{entry.user.fullName}</div>
+                    <div className={styles.roleHistoryDetail}>
+                      Role changed from <strong>{entry.oldRole}</strong> to <strong>{entry.newRole}</strong>
+                    </div>
+                    <div className={styles.roleHistoryMeta}>
+                      {entry.changedBy && (
+                        <span>By {entry.changedBy.fullName}</span>
+                      )}
+                      <span>{formatDateTime(entry.changedAt)}</span>
+                    </div>
+                  </div>
+                ))}
+                {roleHistory.length === 0 && (
+                  <div className={styles.emptyState}>
+                    <p>No role changes recorded.</p>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         )}
       </div>

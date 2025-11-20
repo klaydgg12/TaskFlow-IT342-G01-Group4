@@ -1,16 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
 .container {
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 100vh;
   min-height: 100vh;
   background: linear-gradient(135deg, #faf5ff 0%, #eef2ff 100%);
   overflow: hidden;
   align-items: center;
   justify-content: center;
   position: relative;
-  margin: 0;
-  padding: 0;
 }
 
 .backgroundBlur {
@@ -21,26 +20,26 @@
 }
 
 .blur1 {
-  width: 293px;
-  height: 293px;
+  width: 259px;
+  height: 259px;
   background-color: #dab2ff;
-  left: 40px;
-  top: 60px;
+  left: 34px;
+  top: 114px;
 }
 
 .blur2 {
-  width: 274px;
-  height: 274px;
+  width: 307px;
+  height: 307px;
   background-color: #a3b3ff;
-  right: 40px;
-  top: 150px;
+  right: 34px;
+  top: 112px;
 }
 
 .blur3 {
-  width: 274px;
-  height: 274px;
+  width: 301px;
+  height: 301px;
   background-color: #fda5d5;
-  left: 80px;
+  left: 87px;
   bottom: 100px;
 }
 
@@ -49,7 +48,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 32px;
+  gap: 16px;
   position: relative;
   z-index: 1;
   width: 100%;
@@ -62,7 +61,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
 }
 
 .iconContainer {
@@ -89,10 +88,11 @@
 }
 
 .headerSubtitle {
-  font-size: 14px;
-  font-weight: 400;
-  color: #4a5565;
+  font-size: 13px;
+  color: #475467;
   text-align: center;
+  max-width: 320px;
+  margin: 0;
 }
 
 .card {
@@ -101,31 +101,28 @@
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
   width: 100%;
   max-width: 360px;
-  padding: 12px;
+  padding: 16px;
   display: flex;
   flex-direction: column;
   gap: 12px;
-  flex-shrink: 0;
 }
 
 .cardHeader {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
   align-items: center;
 }
 
 .cardTitle {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 700;
   color: #1a202c;
-  text-align: center;
 }
 
 .cardDescription {
   font-size: 13px;
-  font-weight: 400;
-  color: #717182;
+  color: #6a7282;
   text-align: center;
 }
 
@@ -136,36 +133,15 @@
 }
 
 .googleButtonContainer {
-  display: flex;
-}
-
-.googleButton {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
   width: 100%;
-  height: 40px;
-  padding: 0 16px;
-  border: 1.6px solid #d1d5dc;
-  border-radius: 8px;
-  background-color: white;
-  cursor: pointer;
-  font-size: 13px;
-  font-weight: 400;
-  color: #364153;
-  transition: all 0.2s;
-  font-family: 'Arimo', sans-serif;
+  display: flex;
+  justify-content: center;
 }
 
-.googleButton:hover {
-  background-color: #f9fafb;
-  border-color: #9ca3af;
-}
-
-.googleIcon {
-  width: 16px;
-  height: 16px;
+.googleButtonContainer > div {
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
 .divider {
@@ -186,118 +162,106 @@
   background-color: white;
   padding: 0 8px;
   font-size: 13px;
-  font-weight: 400;
   color: #6a7282;
 }
 
-.demoAccountsSection {
+.formFields {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 }
 
-.demoAccountLabel {
-  font-size: 16px;
-  font-weight: 400;
-  color: #6a7282;
-  padding: 0 24px;
-}
-
-.demoAccountsList {
+.formGroup {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 3px;
 }
 
-.demoAccount {
+.label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #1a202c;
+}
+
+.inputWrapper {
+  position: relative;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 8px;
-  border: 1.6px solid #d1d5dc;
+}
+
+.input {
+  width: 100%;
+  height: 36px;
+  padding: 6px 12px 6px 34px;
+  border: 1px solid transparent;
   border-radius: 8px;
-  background-color: white;
-  cursor: pointer;
+  background-color: #f3f3f5;
+  font-size: 13px;
+  font-family: 'Arimo', sans-serif;
+  color: #1a202c;
   transition: all 0.2s;
 }
 
-.demoAccount:hover {
+.input::placeholder {
+  color: #717182;
+}
+
+.input:focus {
+  outline: none;
+  background-color: #ffffff;
   border-color: #4f39f6;
-  box-shadow: 0 2px 8px rgba(79, 57, 246, 0.1);
 }
 
-.accountLeft {
+.inputIcon {
+  position: absolute;
+  left: 12px;
+  width: 16px;
+  height: 16px;
+  pointer-events: none;
+}
+
+.errorMessage {
+  color: #ef4444;
+  font-size: 12px;
+  background: rgba(239, 68, 68, 0.08);
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.submitButton {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
-}
-
-.accountAvatar {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 100%;
+  height: 42px;
+  background-color: #030213;
   color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 14px;
   font-weight: 600;
-  font-size: 12px;
+  transition: background-color 0.2s;
 }
 
-.johnAvatar {
-  background: #1447e6;
+.submitButton:hover {
+  background-color: #1a1a2e;
 }
 
-.adminAvatar {
-  background: #8200db;
-}
-
-.accountInfo {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.accountName {
-  font-size: 13px;
-  font-weight: 700;
-  color: #101828;
-}
-
-.accountEmail {
-  font-size: 12px;
-  font-weight: 400;
-  color: #6a7282;
-}
-
-.accountRole {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 4px 8px;
-  border-radius: 26843500px;
-  height: 24px;
-  font-size: 11px;
-  font-weight: 400;
-}
-
-.userRole {
-  background-color: #bfdbfe;
-  color: #1447e6;
-}
-
-.adminRole {
-  background-color: #e9d5ff;
-  color: #8200db;
+.submitIcon {
+  width: 14px;
+  height: 14px;
 }
 
 .securityBox {
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 4px;
   padding: 10px;
   background: linear-gradient(to right, #eef2ff, #faf5ff);
-  border: 0.8px solid #c6d2ff;
+  border: 1px solid #c6d2ff;
   border-radius: 8px;
 }
 
@@ -319,59 +283,32 @@
   display: flex;
   flex-direction: column;
   gap: 2px;
-  margin-top: 2px;
+  font-size: 12px;
+  color: #4a5565;
 }
 
 .securityItem {
   font-size: 12px;
-  font-weight: 400;
-  color: #4a5565;
 }
 
-.footer {
+.signUpLink {
   display: flex;
-  flex-direction: column;
-  gap: 10px;
-  width: 100%;
-}
-
-.createAccountDivider {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.createAccountButton {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 40px;
-  border: 1.6px solid #c6d2ff;
-  border-radius: 8px;
-  background-color: white;
-  cursor: pointer;
+  gap: 6px;
   font-size: 13px;
-  font-weight: 400;
+  color: #4a5565;
+  justify-content: center;
+}
+
+.linkButton {
+  background: none;
+  border: none;
   color: #4f39f6;
-  transition: all 0.2s;
-  font-family: 'Arimo', sans-serif;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
 }
 
-.createAccountButton:hover {
-  background-color: #f9fafb;
-  border-color: #4f39f6;
+.linkButton:hover {
+  text-decoration: underline;
 }
 
-.footerText {
-  font-size: 12px;
-  font-weight: 400;
-  color: #6a7282;
-  text-align: center;
-}
-
-.bottomText {
-  text-align: center;
-  font-size: 12px;
-  font-weight: 400;
-  color: #6a7282;
-}

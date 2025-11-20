@@ -18,7 +18,7 @@ public class DataInitializer implements CommandLineRunner {
         // Check if admin user exists
         if (!userRepository.existsByEmail("admin@taskflow.com")) {
             // Use service so password is hashed
-            userService.createUser("admin@taskflow.com", "admin123", "Admin User", "ADMIN");
+            userService.createUser("admin@taskflow.com", "admin123", "Admin User", "ADMIN", null);
             System.out.println("✓ Admin account created: admin@taskflow.com");
         } else {
             System.out.println("✓ Admin account already exists");

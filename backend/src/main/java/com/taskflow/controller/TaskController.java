@@ -1,10 +1,13 @@
 package com.taskflow.controller;
 
+import com.taskflow.dto.TaskRequest;
 import com.taskflow.entity.Task;
 import com.taskflow.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -16,16 +19,18 @@ public class TaskController {
     @Autowired
     private TaskService taskService;
 
-    @PostMapping("/create")
-    public ResponseEntity<?> createTask(@RequestBody Map<String, Object> request) {
-        try {
-            String title = (String) request.get("title");
-            String description = (String) request.get("description");
-            String priority = (String) request.get("priority");
-            Long assignedUserId = ((Number) request.get("assignedUserId")).longValue();
-            Long createdById = ((Number) request.get("createdById")).longValue();
+    private String getClientIp(HttpServletRequest request) {
+        String header = request.getHeader("X-Forwarded-For");
+        if (header != null && !header.isBlank()) {
+            return header.split(",")[0].trim();
+        }
+        return request.getRemoteAddr();
+    }
 
-            Task task = taskService.createTask(title, description, priority, assignedUserId, createdById);
+    @PostMapping("/create")
+    public ResponseEntity<?> createTask(@RequestBody TaskRequest request, HttpServletRequest httpServletRequest) {
+        try {
+            Task task = taskService.createTask(request, getClientIp(httpServletRequest));
             return ResponseEntity.ok(Map.of(
                     "success", true,
                     "message", "Task created successfully",
@@ -87,10 +92,9 @@ public class TaskController {
     }
 
     @PostMapping("/update/{id}")
-    public ResponseEntity<?> updateTask(@PathVariable Long id, @RequestBody Map<String, String> request) {
+    public ResponseEntity<?> updateTask(@PathVariable Long id, @RequestBody TaskRequest request) {
         try {
-            Task task = taskService.updateTask(id, request.get("title"), request.get("description"),
-                    request.get("status"), request.get("priority"));
+            Task task = taskService.updateTask(id, request);
             return ResponseEntity.ok(Map.of(
                     "success", true,
                     "message", "Task updated successfully",

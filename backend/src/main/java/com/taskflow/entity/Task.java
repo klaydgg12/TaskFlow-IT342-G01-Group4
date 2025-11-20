@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Task {
+    // Getters & Setters
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,10 +24,10 @@ public class Task {
     private String description;
 
     @Column(nullable = false)
-    private String status; // TODO, IN_PROGRESS, COMPLETED
+    private String status;
 
     @Column(nullable = false)
-    private String priority; // LOW, MEDIUM, HIGH
+    private String priority;
 
     @Column(name = "due_date")
     private LocalDateTime dueDate;

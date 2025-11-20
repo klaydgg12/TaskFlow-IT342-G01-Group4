@@ -1,10 +1,15 @@
 package com.taskflow.controller;
 
+import com.taskflow.dto.GoogleSignInRequest;
+import com.taskflow.dto.UserUpdateRequest;
 import com.taskflow.entity.User;
+import com.taskflow.service.AuditLogService;
 import com.taskflow.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Optional;
 import java.util.Map;
@@ -19,6 +24,17 @@ public class UserController {
     @Autowired
     private org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder passwordEncoder;
 
+    @Autowired
+    private AuditLogService auditLogService;
+
+    private String getClientIp(HttpServletRequest request) {
+        String header = request.getHeader("X-Forwarded-For");
+        if (header != null && !header.isBlank()) {
+            return header.split(",")[0].trim();
+        }
+        return request.getRemoteAddr();
+    }
+
     @PostMapping("/create")
     public ResponseEntity<?> createUser(@RequestBody Map<String, String> request) {
         try {
@@ -26,8 +42,9 @@ public class UserController {
             String password = request.get("password");
             String fullName = request.get("fullName");
             String role = request.getOrDefault("role", "USER");
+            String googleId = request.get("googleId");
 
-            User user = userService.createUser(email, password, fullName, role);
+            User user = userService.createUser(email, password, fullName, role, googleId);
             return ResponseEntity.ok(Map.of(
                     "success", true,
                     "message", "User created successfully",
@@ -93,23 +110,71 @@ public class UserController {
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<?> authenticate(@RequestBody Map<String, String> request) {
+    public ResponseEntity<?> authenticate(@RequestBody Map<String, String> request, HttpServletRequest httpServletRequest) {
         String email = request.get("email");
         String password = request.get("password");
         try {
             Optional<User> user = userService.authenticate(email, password);
             if (user.isPresent()) {
+                auditLogService.logAction(
+                        user.get(),
+                        "LOGIN_SUCCESS",
+                        "USER",
+                        user.get().getId(),
+                        "User logged in successfully",
+                        null,
+                        null,
+                        getClientIp(httpServletRequest));
                 return ResponseEntity.ok(Map.of(
                         "success", true,
                         "user", user.get()));
             }
+            Optional<User> existing = userService.getUserByEmail(email);
+            existing.ifPresent(u -> auditLogService.logAction(
+                    u,
+                    "LOGIN_FAILED",
+                    "USER",
+                    u.getId(),
+                    "Invalid credentials",
+                    null,
+                    null,
+                    getClientIp(httpServletRequest)));
             return ResponseEntity.status(401).body(Map.of(
                     "success", false,
                     "message", "Invalid credentials"));
+        } catch (IllegalStateException ex) {
+            return ResponseEntity.status(403).body(Map.of(
+                    "success", false,
+                    "message", ex.getMessage()));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(Map.of(
                     "success", false,
                     "message", e.getMessage()));
+        }
+    }
+
+    @PostMapping("/google-signin")
+    public ResponseEntity<?> googleSignIn(@RequestBody GoogleSignInRequest request, HttpServletRequest httpServletRequest) {
+        try {
+            User user = userService.authenticateWithGoogle(request.getIdToken());
+            auditLogService.logAction(
+                    user,
+                    "LOGIN_SUCCESS",
+                    "USER",
+                    user.getId(),
+                    "User logged in with Google",
+                    null,
+                    null,
+                    getClientIp(httpServletRequest));
+            return ResponseEntity.ok(Map.of("success", true, "user", user));
+        } catch (IllegalStateException ex) {
+            return ResponseEntity.status(403).body(Map.of(
+                    "success", false,
+                    "message", ex.getMessage()));
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().body(Map.of(
+                    "success", false,
+                    "message", ex.getMessage()));
         }
     }
 
@@ -124,9 +189,11 @@ public class UserController {
     }
 
     @PostMapping("/update/{id}")
-    public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody Map<String, String> request) {
+    public ResponseEntity<?> updateUser(@PathVariable Long id,
+            @RequestBody UserUpdateRequest request,
+            HttpServletRequest httpServletRequest) {
         try {
-            User user = userService.updateUser(id, request.get("fullName"), request.get("email"));
+            User user = userService.updateUser(id, request, request.getUpdatedById(), getClientIp(httpServletRequest));
             return ResponseEntity.ok(Map.of(
                     "success", true,
                     "message", "User updated successfully",

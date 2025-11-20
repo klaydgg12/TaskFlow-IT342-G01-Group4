@@ -7,14 +7,18 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "users")
+@Table(name = "userdb")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
     private Long id;
+
+    @Column(name = "google_id")
+    private String googleId;
 
     @Column(nullable = false, unique = true)
     private String email;
@@ -22,20 +26,40 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)
+    @Column(name = "name", nullable = false)
     private String fullName;
 
     @Column(nullable = false)
     private String role; // ADMIN or USER
 
+    @Column(name = "profile_pic")
+    private String profilePic;
+
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    @Column(name = "is_active")
-    private Boolean isActive = true;
+    @Column(name = "status", nullable = false)
+    private String status = "ACTIVE";
 
     @PrePersist
     protected void onCreate() {
-        createdAt = LocalDateTime.now();
+        if (createdAt == null) {
+            createdAt = LocalDateTime.now();
+        }
+        if (status == null) {
+            status = "ACTIVE";
+        }
+    }
+
+    @Transient
+    public Boolean getIsActive() {
+        if (status == null) {
+            return null;
+        }
+        return "ACTIVE".equalsIgnoreCase(status);
+    }
+
+    public void setIsActive(Boolean active) {
+        this.status = (active != null && active) ? "ACTIVE" : "DEACTIVATED";
     }
 }
