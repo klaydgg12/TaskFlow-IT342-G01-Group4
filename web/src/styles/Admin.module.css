@@ -394,6 +394,18 @@
   cursor: pointer;
 }
 
+.roleDropdown {
+  border: none;
+  background: transparent;
+  font-size: 13px;
+  font-weight: 600;
+  color: #0a0a0a;
+  flex: 1;
+  outline: none;
+  appearance: none;
+  cursor: pointer;
+}
+
 .roleSelect img {
   width: 14px;
   height: 14px;
@@ -485,4 +497,120 @@
   flex: 1;
   color: #6a7282;
   font-size: 16px;
+}
+
+.auditList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 24px;
+}
+
+.auditItem {
+  background: #fdfdff;
+  border: 1px solid #eef2ff;
+  border-radius: 14px;
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.08);
+}
+
+.auditHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.auditBadge {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.badgePurple {
+  background: #f3e8ff;
+  color: #7c3aed;
+}
+
+.badgeGreen {
+  background: #dcfce7;
+  color: #047857;
+}
+
+.badgeRed {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.badgeBlue {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.badgeIndigo {
+  background: #e0e7ff;
+  color: #4338ca;
+}
+
+.badgeNeutral {
+  background: #e5e7eb;
+  color: #475467;
+}
+
+.auditDescription {
+  font-size: 0.95rem;
+  color: #101828;
+}
+
+.auditMeta {
+  font-size: 0.85rem;
+  color: #475467;
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.auditTime {
+  font-size: 0.8rem;
+  color: #6b7280;
+}
+
+.roleHistoryList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 24px;
+}
+
+.roleHistoryItem {
+  border: 1px solid #eef2ff;
+  border-radius: 12px;
+  padding: 16px 20px;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+.roleHistoryUser {
+  font-weight: 600;
+  color: #101828;
+}
+
+.roleHistoryDetail {
+  font-size: 0.9rem;
+  color: #475467;
+}
+
+.roleHistoryMeta {
+  font-size: 0.85rem;
+  color: #6b7280;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
 }

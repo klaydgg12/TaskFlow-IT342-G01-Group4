@@ -2,10 +2,10 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import styles from '@/styles/CreateAccount.module.css'
 import { API_BASE } from '@/config/api'
+import { GoogleLogin, CredentialResponse } from '@react-oauth/google'
 
 // Figma asset URLs
 const imgIcon = 'https://www.figma.com/api/mcp/asset/b9d9fdb3-ca10-42ee-bc7c-491dcf79baa3'
-const imgRegisterPage = 'https://www.figma.com/api/mcp/asset/27b60b35-a90a-412d-8338-7dc763e346b1'
 const imgIcon1 = 'https://www.figma.com/api/mcp/asset/d101073a-39db-4ab9-8108-dbbc1f25b377'
 const imgIcon2 = 'https://www.figma.com/api/mcp/asset/e9ff9f16-0746-4d2a-8ead-c14220da875b'
 const imgIcon3 = 'https://www.figma.com/api/mcp/asset/7528bdca-b60f-4a4d-a7ca-8db2ba5899ff'
@@ -89,6 +89,37 @@ export default function CreateAccount() {
     }
   }
 
+  const handleGoogleSuccess = async (credentialResponse: CredentialResponse) => {
+    const token = credentialResponse.credential
+    if (!token) {
+      setError('Unable to retrieve Google credentials.')
+      return
+    }
+
+    setLoading(true)
+    try {
+      const response = await fetch(`${API_BASE}/api/users/google-signin`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ idToken: token }),
+      })
+      const data = await response.json()
+
+      if (response.ok && data.success && data.user) {
+        localStorage.setItem('user', JSON.stringify(data.user))
+        localStorage.setItem('userId', String(data.user.id))
+        localStorage.setItem('userRole', data.user.role)
+        navigate(data.user.role === 'ADMIN' ? '/admin' : '/dashboard')
+      } else {
+        setError(data.message || 'Google sign-in failed. Please try again.')
+      }
+    } catch (err) {
+      setError('Google sign-in failed. Please try again.')
+    } finally {
+      setLoading(false)
+    }
+  }
+
   return (
     <div className={styles.container} data-node-id="3:5533">
       {/* Background blur effects */}
@@ -113,10 +144,14 @@ export default function CreateAccount() {
           {/* Card Content */}
           <div className={styles.cardContent} data-node-id="3:5551">
             {/* Google Button */}
-            <button className={styles.googleButton} data-node-id="3:5552">
-              <img alt="Google logo" className={styles.googleIcon} src={imgRegisterPage} data-node-id="3:5553" />
-              <span>Sign up with Google</span>
-            </button>
+            <div className={styles.googleButtonContainer} data-node-id="3:5552">
+              <GoogleLogin
+                onSuccess={(credentialResponse) => handleGoogleSuccess(credentialResponse)}
+                onError={() => setError('Google sign-in failed. Please try again.')}
+                width="100%"
+                text="signup_with"
+              />
+            </div>
 
             {/* Email Registration Divider */}
             <div className={styles.divider} data-node-id="3:5622">

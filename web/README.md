@@ -27,13 +27,13 @@ web/
 
 ## Features
 
-- ✅ **Sign-in Page**: Google OAuth and email/password authentication with demo accounts
+- ✅ **Sign-in Page**: Google OAuth and email/password authentication tied to the Spring backend
 - ✅ **Registration Page**: Account creation with email, password, and profile info
 - ✅ **Dashboard**: Main interface with task management, statistics, and activity tracking
 - ✅ **Task Management**: Create, view, and manage tasks with different statuses (Pending, In Progress, Completed)
+- ✅ **Admin Panel**: Promote/demote users and deactivate accounts in real time
 - ✅ **Responsive Design**: Full viewport coverage with no scrolling, flex-based layouts
-- ✅ **CSS Modules**: Scoped styling to avoid naming conflicts
-- ✅ **TypeScript**: Fully typed React components
+- ✅ **CSS Modules** & **TypeScript**: Scoped styling and fully typed components
 
 ## Getting Started
 
@@ -41,27 +41,23 @@ web/
 
 - Node.js 16+ and npm/yarn
 
-### Installation
+### Environment Variables
 
-1. Navigate to the web directory:
+Create `web/.env` with:
+```
+VITE_API_BASE=http://localhost:8080
+VITE_GOOGLE_CLIENT_ID=your-google-client-id.apps.googleusercontent.com
+```
+
+### Installation
 
 ```bash
 cd web
-```
-
-2. Install dependencies:
-
-```bash
 npm install
-```
-
-3. Start the development server:
-
-```bash
 npm run dev
 ```
 
-4. Open your browser and navigate to `http://localhost:5173`
+Open `http://localhost:5173` in the browser.
 
 ## Available Scripts
 
@@ -99,11 +95,7 @@ The project uses **CSS Modules** for styling:
 
 ## Next Steps
 
-- [ ] Integrate with backend API
-- [ ] Implement user authentication with Google OAuth
-- [ ] Add task creation modal
-- [ ] Implement task filtering and search
-- [ ] Add task detail view
-- [ ] Implement data persistence
-- [ ] Add unit tests
-- [ ] Set up CI/CD pipeline
+- [ ] Add task search/filter in dashboard
+- [ ] Surface audit logs/role history data
+- [ ] Add form validation + toasts
+- [ ] Implement automated tests and CI

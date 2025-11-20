@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import styles from '@/styles/SignIn.module.css'
 import { API_BASE } from '@/config/api'
+import { GoogleLogin, CredentialResponse } from '@react-oauth/google'
 
 // Figma asset URLs
 const imgIcon = 'https://www.figma.com/api/mcp/asset/b9d9fdb3-ca10-42ee-bc7c-491dcf79baa3'
@@ -68,51 +69,84 @@ export default function SignIn() {
     }
   }
 
-  return (
-    <div className={styles.container} data-node-id="3:5355">
-      {/* Background blur effects */}
-      <div className={`${styles.backgroundBlur} ${styles.blur1}`} data-node-id="3:5440"></div>
-      <div className={`${styles.backgroundBlur} ${styles.blur2}`} data-node-id="3:5441"></div>
-      <div className={`${styles.backgroundBlur} ${styles.blur3}`} data-node-id="3:5442"></div>
+  const handleGoogleSuccess = async (credentialResponse: CredentialResponse) => {
+    const token = credentialResponse.credential
+    if (!token) {
+      setError('Unable to retrieve Google credentials.')
+      return
+    }
 
-      {/* Main Content */}
+    setLoading(true)
+    try {
+      const response = await fetch(`${API_BASE}/api/users/google-signin`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ idToken: token }),
+      })
+      const data = await response.json()
+      if (response.ok && data.success && data.user) {
+        localStorage.setItem('user', JSON.stringify(data.user))
+        localStorage.setItem('userId', String(data.user.id))
+        localStorage.setItem('userRole', data.user.role)
+
+        if (data.user.role === 'ADMIN') {
+          navigate('/admin')
+        } else {
+          navigate('/dashboard')
+        }
+      } else {
+        setError(data.message || 'Google sign-in failed.')
+      }
+    } catch (err) {
+      setError('Google sign-in failed. Please try again.')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <div className={styles.container}>
+      <div className={`${styles.backgroundBlur} ${styles.blur1}`}></div>
+      <div className={`${styles.backgroundBlur} ${styles.blur2}`}></div>
+      <div className={`${styles.backgroundBlur} ${styles.blur3}`}></div>
+
       <div className={styles.mainContent}>
-        {/* Header Section */}
-        <div className={styles.headerSection} data-node-id="3:5358">
-          <div className={styles.iconContainer} data-node-id="3:5359">
-            <img alt="TaskFlow icon" className={styles.icon} src={imgIcon} data-node-id="3:5360" />
+        <div className={styles.headerSection}>
+          <div className={styles.iconContainer}>
+            <img alt="TaskFlow icon" className={styles.icon} src={imgIcon} />
           </div>
-          <h1 className={styles.headerTitle} data-node-id="3:5362">
-            Welcome to TaskFlow
-          </h1>
-          <p className={styles.headerSubtitle} data-node-id="3:5364">
-            Your intelligent task management companion
-          </p>
+          <p className={styles.headerTitle}>TaskFlow</p>
+          <p className={styles.headerSubtitle}>Sign in to keep your tasks organized and your team aligned.</p>
         </div>
 
-        {/* Card */}
-        <div className={styles.card} data-node-id="3:5366">
-          {/* Card Header */}
-          <div className={styles.cardHeader} data-node-id="3:5367">
-            <h2 className={styles.cardTitle} data-node-id="3:5368">
-              Sign In
-            </h2>
-            <p className={styles.cardDescription} data-node-id="3:5370">
-              Sign in with your email to access your tasks
-            </p>
+        <div className={styles.card}>
+          <div className={styles.cardHeader}>
+            <h2 className={styles.cardTitle}>Sign In</h2>
+            <p className={styles.cardDescription}>Welcome back! Choose how you want to access your workspace.</p>
           </div>
 
-          {/* Card Content */}
-          <div className={styles.cardContent} data-node-id="3:5372">
-            {/* Email Login Form */}
-            <form onSubmit={handleSubmit} className={styles.formFields} style={{ width: '100%' }}>
-              {/* Email */}
-              <div className={styles.formGroup} style={{ marginBottom: '16px' }}>
-                <label style={{ fontSize: '14px', fontWeight: '500', marginBottom: '8px', display: 'block' }}>
-                  Email Address
-                </label>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <img alt="Email icon" style={{ width: '16px', height: '16px' }} src={imgIcon1} />
+          <div className={styles.cardContent}>
+            <div className={styles.googleButtonContainer}>
+              <GoogleLogin
+                onSuccess={(credentialResponse) => handleGoogleSuccess(credentialResponse)}
+                onError={() => setError('Google sign-in failed. Please try again.')}
+                useOneTap
+                width="100%"
+                text="signin_with"
+              />
+            </div>
+
+            <div className={styles.divider}>
+              <div className={styles.dividerLine}></div>
+              <div className={styles.dividerText}>Or sign in with email</div>
+              <div className={styles.dividerLine}></div>
+            </div>
+
+            <form onSubmit={handleSubmit} className={styles.formFields}>
+              <div className={styles.formGroup}>
+                <label className={styles.label}>Email Address</label>
+                <div className={styles.inputWrapper}>
+                  <img alt="Email icon" className={styles.inputIcon} src={imgIcon1} />
                   <input
                     type="email"
                     name="email"
@@ -120,18 +154,14 @@ export default function SignIn() {
                     placeholder="you@example.com"
                     value={formData.email}
                     onChange={handleChange}
-                    style={{ flex: 1 }}
                   />
                 </div>
               </div>
 
-              {/* Password */}
-              <div className={styles.formGroup} style={{ marginBottom: '16px' }}>
-                <label style={{ fontSize: '14px', fontWeight: '500', marginBottom: '8px', display: 'block' }}>
-                  Password
-                </label>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <img alt="Password icon" style={{ width: '16px', height: '16px' }} src={imgIcon2} />
+              <div className={styles.formGroup}>
+                <label className={styles.label}>Password</label>
+                <div className={styles.inputWrapper}>
+                  <img alt="Password icon" className={styles.inputIcon} src={imgIcon2} />
                   <input
                     type="password"
                     name="password"
@@ -139,99 +169,42 @@ export default function SignIn() {
                     placeholder="Enter your password"
                     value={formData.password}
                     onChange={handleChange}
-                    style={{ flex: 1 }}
                   />
                 </div>
               </div>
 
               {error && (
-                <div style={{ color: '#ef4444', fontSize: '14px', marginBottom: '16px' }}>
+                <div className={styles.errorMessage}>
                   {error}
                 </div>
               )}
 
-              {/* Sign In Button */}
-              <button 
-                type="submit" 
-                className={styles.submitButton} 
-                disabled={loading}
-                style={{ width: '100%', marginBottom: '16px' }}
-              >
+              <button type="submit" className={styles.submitButton} disabled={loading}>
                 <span>{loading ? 'Signing In...' : 'Sign In'}</span>
-                {!loading && <img alt="Arrow" style={{ width: '16px', height: '16px' }} src={imgIcon4} />}
+                {!loading && <img alt="Arrow" className={styles.submitIcon} src={imgIcon4} />}
               </button>
             </form>
 
-            {/* Divider */}
-            <div className={styles.divider} data-node-id="3:5433">
-              <div className={styles.dividerLine} data-node-id="3:5434"></div>
-              <div className={styles.dividerText} data-node-id="3:5435">
-                Or continue with
+            <div className={styles.securityBox}>
+              <div className={styles.securityTitle}>
+                <img alt="Security icon" className={styles.securityIcon} src={imgIcon3} />
+                <span>Secure authentication</span>
               </div>
-              <div className={styles.dividerLine}></div>
+              <div className={styles.securityItems}>
+                <div className={styles.securityItem}>• Encrypted password storage</div>
+                <div className={styles.securityItem}>• Secure session management</div>
+                <div className={styles.securityItem}>• Data privacy protection</div>
+              </div>
             </div>
 
-            {/* Google Button */}
-            <div className={styles.googleButtonContainer} data-node-id="3:5426">
-              <button className={styles.googleButton}>
-                <img alt="Google logo" className={styles.googleIcon} src={imgLogin} data-node-id="3:5427" />
-                <span>Continue with Google</span>
+            <div className={styles.signUpLink}>
+              <span>Don&apos;t have an account?</span>
+              <button type="button" className={styles.linkButton} onClick={() => navigate('/register')}>
+                Create one
               </button>
-            </div>
-
-            {/* Security Box */}
-            <div className={styles.securityBox} data-node-id="3:5401">
-              <div className={styles.securityTitle} data-node-id="3:5402">
-                <img
-                  alt="Security icon"
-                  className={styles.securityIcon}
-                  src={imgIcon3}
-                  data-node-id="3:5403"
-                />
-                <span>Secure Authentication</span>
-              </div>
-              <div className={styles.securityItems} data-node-id="3:5409">
-                <div className={styles.securityItem} data-node-id="3:5410">
-                  • Encrypted password storage
-                </div>
-                <div className={styles.securityItem} data-node-id="3:5412">
-                  • Secure session management
-                </div>
-                <div className={styles.securityItem} data-node-id="3:5414">
-                  • Data privacy protection
-                </div>
-              </div>
-            </div>
-
-            {/* Create Account Section */}
-            <div className={styles.footer} data-node-id="3:5416">
-              <div className={styles.divider} data-node-id="3:5417">
-                <div className={styles.dividerLine} data-node-id="3:5418"></div>
-                <div className={styles.dividerText} data-node-id="3:5419">
-                  New to TaskFlow?
-                </div>
-                <div className={styles.dividerLine}></div>
-              </div>
-
-              <button
-                className={styles.createAccountButton}
-                onClick={() => navigate('/register')}
-                data-node-id="3:5421"
-              >
-                Create Free Account
-              </button>
-
-              <p className={styles.footerText} data-node-id="3:5424">
-                Join TaskFlow and start managing tasks efficiently
-              </p>
             </div>
           </div>
         </div>
-
-        {/* Bottom Text */}
-        <p className={styles.bottomText} data-node-id="3:5437">
-          Production-ready authentication system
-        </p>
       </div>
     </div>
   )
