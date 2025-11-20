@@ -26,8 +26,9 @@ public class UserController {
             String password = request.get("password");
             String fullName = request.get("fullName");
             String role = request.getOrDefault("role", "USER");
+            String googleId = request.get("googleId");
 
-            User user = userService.createUser(email, password, fullName, role);
+            User user = userService.createUser(email, password, fullName, role, googleId);
             return ResponseEntity.ok(Map.of(
                     "success", true,
                     "message", "User created successfully",

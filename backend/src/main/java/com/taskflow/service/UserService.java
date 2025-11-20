@@ -16,7 +16,7 @@ public class UserService {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
-    public User createUser(String email, String password, String fullName, String role) {
+    public User createUser(String email, String password, String fullName, String role, String googleId) {
         if (userRepository.existsByEmail(email)) {
             throw new RuntimeException("Email already exists");
         }
@@ -26,8 +26,16 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(password));
         user.setFullName(fullName);
         user.setRole(role); // ADMIN or USER
-        user.setIsActive(true);
-        return userRepository.save(user);
+        if (googleId != null && !googleId.isBlank()) {
+            user.setGoogleId(googleId.trim());
+        }
+        user.setStatus("ACTIVE");
+        User saved = userRepository.save(user);
+        if (saved.getGoogleId() == null) {
+            saved.setGoogleId("G" + saved.getId());
+            saved = userRepository.save(saved);
+        }
+        return saved;
     }
 
     public Optional<User> authenticate(String email, String rawPassword) {
