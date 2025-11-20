@@ -1,0 +1,377 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100vh;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #faf5ff 0%, #eef2ff 100%);
+  overflow: hidden;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  margin: 0;
+  padding: 0;
+}
+
+.backgroundBlur {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.2;
+  filter: blur(80px);
+}
+
+.blur1 {
+  width: 293px;
+  height: 293px;
+  background-color: #dab2ff;
+  left: 40px;
+  top: 60px;
+}
+
+.blur2 {
+  width: 274px;
+  height: 274px;
+  background-color: #a3b3ff;
+  right: 40px;
+  top: 150px;
+}
+
+.blur3 {
+  width: 274px;
+  height: 274px;
+  background-color: #fda5d5;
+  left: 80px;
+  bottom: 100px;
+}
+
+.mainContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.headerSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.iconContainer {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, #7c3aed 0%, #4f39f6 100%);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+}
+
+.icon {
+  width: 48px;
+  height: 48px;
+}
+
+.headerTitle {
+  font-size: 14px;
+  font-weight: 700;
+  color: #101828;
+  text-align: center;
+}
+
+.headerSubtitle {
+  font-size: 14px;
+  font-weight: 400;
+  color: #4a5565;
+  text-align: center;
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 14px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  width: 100%;
+  max-width: 360px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.cardHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: center;
+}
+
+.cardTitle {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1a202c;
+  text-align: center;
+}
+
+.cardDescription {
+  font-size: 13px;
+  font-weight: 400;
+  color: #717182;
+  text-align: center;
+}
+
+.cardContent {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.googleButtonContainer {
+  display: flex;
+}
+
+.googleButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  height: 40px;
+  padding: 0 16px;
+  border: 1.6px solid #d1d5dc;
+  border-radius: 8px;
+  background-color: white;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 400;
+  color: #364153;
+  transition: all 0.2s;
+  font-family: 'Arimo', sans-serif;
+}
+
+.googleButton:hover {
+  background-color: #f9fafb;
+  border-color: #9ca3af;
+}
+
+.googleIcon {
+  width: 16px;
+  height: 16px;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  margin: 4px 0;
+}
+
+.dividerLine {
+  flex: 1;
+  height: 1px;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.dividerText {
+  background-color: white;
+  padding: 0 8px;
+  font-size: 13px;
+  font-weight: 400;
+  color: #6a7282;
+}
+
+.demoAccountsSection {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.demoAccountLabel {
+  font-size: 16px;
+  font-weight: 400;
+  color: #6a7282;
+  padding: 0 24px;
+}
+
+.demoAccountsList {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.demoAccount {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px;
+  border: 1.6px solid #d1d5dc;
+  border-radius: 8px;
+  background-color: white;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.demoAccount:hover {
+  border-color: #4f39f6;
+  box-shadow: 0 2px 8px rgba(79, 57, 246, 0.1);
+}
+
+.accountLeft {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.accountAvatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.johnAvatar {
+  background: #1447e6;
+}
+
+.adminAvatar {
+  background: #8200db;
+}
+
+.accountInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.accountName {
+  font-size: 13px;
+  font-weight: 700;
+  color: #101828;
+}
+
+.accountEmail {
+  font-size: 12px;
+  font-weight: 400;
+  color: #6a7282;
+}
+
+.accountRole {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 8px;
+  border-radius: 26843500px;
+  height: 24px;
+  font-size: 11px;
+  font-weight: 400;
+}
+
+.userRole {
+  background-color: #bfdbfe;
+  color: #1447e6;
+}
+
+.adminRole {
+  background-color: #e9d5ff;
+  color: #8200db;
+}
+
+.securityBox {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 10px;
+  background: linear-gradient(to right, #eef2ff, #faf5ff);
+  border: 0.8px solid #c6d2ff;
+  border-radius: 8px;
+}
+
+.securityTitle {
+  font-size: 12px;
+  font-weight: 700;
+  color: #101828;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.securityIcon {
+  width: 16px;
+  height: 16px;
+}
+
+.securityItems {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: 2px;
+}
+
+.securityItem {
+  font-size: 12px;
+  font-weight: 400;
+  color: #4a5565;
+}
+
+.footer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.createAccountDivider {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.createAccountButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  border: 1.6px solid #c6d2ff;
+  border-radius: 8px;
+  background-color: white;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 400;
+  color: #4f39f6;
+  transition: all 0.2s;
+  font-family: 'Arimo', sans-serif;
+}
+
+.createAccountButton:hover {
+  background-color: #f9fafb;
+  border-color: #4f39f6;
+}
+
+.footerText {
+  font-size: 12px;
+  font-weight: 400;
+  color: #6a7282;
+  text-align: center;
+}
+
+.bottomText {
+  text-align: center;
+  font-size: 12px;
+  font-weight: 400;
+  color: #6a7282;
+}

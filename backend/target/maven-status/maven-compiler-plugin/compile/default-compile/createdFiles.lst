@@ -1,0 +1,11 @@
+com\taskflow\controller\UserController.class
+com\taskflow\controller\TaskController.class
+com\taskflow\entity\Task.class
+com\taskflow\repository\UserRepository.class
+com\taskflow\TaskFlowApplication.class
+com\taskflow\repository\TaskRepository.class
+com\taskflow\config\SecurityConfig.class
+com\taskflow\service\UserService.class
+com\taskflow\entity\User.class
+com\taskflow\service\TaskService.class
+com\taskflow\config\DataInitializer.class
