@@ -76,8 +76,7 @@
 }
 
 .icon {
-  width: 48px;
-  height: 48px;
+  font-size: 48px;
 }
 
 .headerTitle {
@@ -215,9 +214,11 @@
 .inputIcon {
   position: absolute;
   left: 12px;
-  width: 16px;
-  height: 16px;
+  font-size: 16px;
   pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .errorMessage {
@@ -251,8 +252,7 @@
 }
 
 .submitIcon {
-  width: 14px;
-  height: 14px;
+  font-size: 14px;
 }
 
 .securityBox {
@@ -275,8 +275,10 @@
 }
 
 .securityIcon {
-  width: 16px;
-  height: 16px;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .securityItems {
@@ -311,4 +313,3 @@
 .linkButton:hover {
   text-decoration: underline;
 }
-

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import styles from '@/styles/Admin.module.css'
-import { API_BASE } from '@/config/api'
+import styles from '../styles/Admin.module.css'
+import { API_BASE } from '../config/api'
 
 // Figma asset URLs
 const imgIcon = 'https://www.figma.com/api/mcp/asset/a05f1d0d-f6f3-4c5b-af8f-b74b58e6cf8d'
@@ -179,10 +179,10 @@ export default function AdminPage() {
   }
 
   useEffect(() => {
-    if (activeTab === 'audit' && auditLogs.length === 0 && !loadingAudit) {
+    if (activeTab === 'audit' && !loadingAudit) {
       fetchAuditLogs()
     }
-    if (activeTab === 'history' && roleHistory.length === 0 && !loadingHistory) {
+    if (activeTab === 'history' && !loadingHistory) {
       fetchRoleHistory()
     }
   }, [activeTab])
@@ -224,41 +224,26 @@ export default function AdminPage() {
       {/* Header */}
       <div className={styles.header} data-node-id="3:5641">
         <div className={styles.headerLeft}>
-          <div className={styles.logoContainer}>
-            <img alt="TaskFlow" src={imgIcon} className={styles.logo} />
-          </div>
-          <div className={styles.brandText}>
-            <div className={styles.brandName}>TaskFlow</div>
-            <div className={styles.brandSubtitle}>Task Management System</div>
+          <div className={styles.logo}>
+            <div className={styles.logoIcon}>📋</div>
+            <div>
+              <div className={styles.logoText}>TaskFlow</div>
+              <div className={styles.logoSubtext}>Task Management System</div>
+            </div>
           </div>
         </div>
         <div className={styles.headerRight}>
-          <button 
-            onClick={() => fetchUsers()}
-            style={{
-              padding: '8px 16px',
-              backgroundColor: '#f3f4f6',
-              border: '1px solid #e5e7eb',
-              borderRadius: '6px',
-              cursor: 'pointer',
-              marginRight: '16px',
-              fontSize: '14px',
-              fontWeight: '500'
-            }}
-            title="Refresh users from database"
-          >
-            🔄 Refresh
-          </button>
           <div className={styles.userInfo}>
             <div className={styles.userName}>{currentUser.name}</div>
             <div className={styles.userRole}>
-              <img alt="Admin icon" src={imgIcon1} className={styles.roleIcon} />
-              <span>{currentUser.role}</span>
+              <span className={styles.userRoleIcon}>👤</span>
+              {currentUser.role}
             </div>
           </div>
-          <button className={styles.logoutBtn} onClick={handleLogout}>
-            <img alt="Logout" src={imgIcon2} />
-            <span>Logout</span>
+          <div className={styles.avatar}></div>
+          <button className={styles.logoutButton} onClick={handleLogout}>
+            <span className={styles.logoutIcon}>🚪</span>
+            Logout
           </button>
         </div>
       </div>
@@ -278,7 +263,7 @@ export default function AdminPage() {
               <div className={styles.statLabel}>Total Users</div>
               <div className={styles.statValue}>{stats.totalUsers}</div>
             </div>
-            <div className={`${styles.statIcon} ${styles.iconPurple}`} />
+            <div className={`${styles.statIcon} ${styles.iconPurple}`}>👥</div>
           </div>
 
           <div className={styles.statCard}>
@@ -286,7 +271,7 @@ export default function AdminPage() {
               <div className={styles.statLabel}>Active Users</div>
               <div className={styles.statValue}>{stats.activeUsers}</div>
             </div>
-            <div className={`${styles.statIcon} ${styles.iconGreen}`} />
+            <div className={`${styles.statIcon} ${styles.iconGreen}`}>✅</div>
           </div>
 
           <div className={styles.statCard}>
@@ -294,7 +279,7 @@ export default function AdminPage() {
               <div className={styles.statLabel}>Administrators</div>
               <div className={styles.statValue}>{stats.admins}</div>
             </div>
-            <div className={`${styles.statIcon} ${styles.iconPurple}`} />
+            <div className={`${styles.statIcon} ${styles.iconPurple}`}>👑</div>
           </div>
 
           <div className={styles.statCard}>
@@ -302,7 +287,7 @@ export default function AdminPage() {
               <div className={styles.statLabel}>Events (24h)</div>
               <div className={styles.statValue}>{stats.events24h}</div>
             </div>
-            <div className={`${styles.statIcon} ${styles.iconOrange}`} />
+            <div className={`${styles.statIcon} ${styles.iconOrange}`}>🔔</div>
           </div>
         </div>
 
@@ -339,32 +324,32 @@ export default function AdminPage() {
             {/* Users Table */}
             <div className={styles.table}>
               <div className={styles.tableHeader}>
-                <div className={styles.tableHeaderCell} style={{ width: '222.55px' }}>User</div>
-                <div className={styles.tableHeaderCell} style={{ width: '277.212px' }}>Email</div>
-                <div className={styles.tableHeaderCell} style={{ width: '185.113px' }}>Role</div>
-                <div className={styles.tableHeaderCell} style={{ width: '133.75px' }}>Status</div>
-                <div className={styles.tableHeaderCell} style={{ width: '134.65px' }}>Joined</div>
-                <div className={styles.tableHeaderCell} style={{ width: '166.725px' }}>Actions</div>
+                <div className={styles.tableHeaderCell}>User</div>
+                <div className={styles.tableHeaderCell}>Email</div>
+                <div className={styles.tableHeaderCell}>Role</div>
+                <div className={styles.tableHeaderCell}>Status</div>
+                <div className={styles.tableHeaderCell}>Joined</div>
+                <div className={styles.tableHeaderCell}>Actions</div>
               </div>
 
               <div className={styles.tableBody}>
                 {users.map((user) => (
                   <div key={user.id} className={styles.tableRow}>
-                    <div className={styles.tableCell} style={{ width: '222.55px' }}>
+                    <div className={styles.tableCell}>
                       <div className={styles.userCell}>
-                        <div className={styles.userAvatar}>{user.fullName.charAt(0)}</div>
+                        <div className={styles.userAvatar}>👤 {user.fullName.charAt(0)}</div>
                         <div>
-                          <div className={styles.userName}>{user.fullName}</div>
-                          <div className={styles.userId}>ID: {user.id}</div>
+                          <div className={styles.userName}>👨‍💼 {user.fullName}</div>
+                          <div className={styles.userId}>🆔 ID: {user.id}</div>
                         </div>
                       </div>
                     </div>
-                    <div className={styles.tableCell} style={{ width: '277.212px' }}>
-                      <div className={styles.email}>{user.email}</div>
+                    <div className={styles.tableCell}>
+                      <div className={styles.email}>📧 {user.email}</div>
                     </div>
-                    <div className={styles.tableCell} style={{ width: '185.113px' }}>
+                    <div className={styles.tableCell}>
                       <div className={styles.roleSelect}>
-                        <img alt={user.role} src={user.role === 'ADMIN' ? imgIcon6 : imgIcon3} />
+                        <span>{user.role === 'ADMIN' ? '👑' : '👤'}</span>
                         <select
                           value={user.role}
                           onChange={(e) => handleRoleChange(user.id, e.target.value)}
@@ -373,10 +358,10 @@ export default function AdminPage() {
                           <option value="USER">USER</option>
                           <option value="ADMIN">ADMIN</option>
                         </select>
-                        <img alt="Dropdown" src={imgIcon4} />
+                        <span>▼</span>
                       </div>
                     </div>
-                    <div className={styles.tableCell} style={{ width: '133.75px' }}>
+                    <div className={styles.tableCell}>
                       <div
                         className={`${styles.statusBadge} ${
                           user.isActive ? styles.statusActive : styles.statusDeactivated
@@ -385,20 +370,17 @@ export default function AdminPage() {
                         {user.isActive ? 'active' : 'deactivated'}
                       </div>
                     </div>
-                    <div className={styles.tableCell} style={{ width: '134.65px' }}>
-                      <div className={styles.date}>{new Date(user.createdAt).toLocaleDateString()}</div>
+                    <div className={styles.tableCell}>
+                      <div className={styles.date}>📅 {new Date(user.createdAt).toLocaleDateString()}</div>
                     </div>
-                    <div className={styles.tableCell} style={{ width: '166.725px' }}>
+                    <div className={styles.tableCell}>
                       <button
                         className={`${styles.actionButton} ${
                           user.isActive ? styles.deactivateBtn : styles.activateBtn
                         }`}
                         onClick={() => toggleUserStatus(user.id, user.isActive)}
                       >
-                        <img
-                          alt="Action"
-                          src={user.isActive ? imgIcon5 : imgIcon7}
-                        />
+                        <span>{user.isActive ? '🚫' : '✅'}</span>
                         <span>{user.isActive ? 'Deactivate' : 'Activate'}</span>
                       </button>
                     </div>
@@ -428,12 +410,12 @@ export default function AdminPage() {
                     <div key={log.id} className={styles.auditItem}>
                       <div className={styles.auditHeader}>
                         <span className={`${styles.auditBadge} ${badge.style}`}>{badge.label}</span>
-                        <span className={styles.auditTime}>{formatDateTime(log.createdAt)}</span>
+                        <span className={styles.auditTime}>🕒 {formatDateTime(log.createdAt)}</span>
                       </div>
-                      <div className={styles.auditDescription}>{log.description}</div>
+                      <div className={styles.auditDescription}>📝 {log.description}</div>
                       <div className={styles.auditMeta}>
-                        <span>User: <strong>{log.user.fullName}</strong></span>
-                        {log.sourceIp && <span>IP: {log.sourceIp}</span>}
+                        <span>👤 User: <strong>{log.user.fullName}</strong></span>
+                        {log.sourceIp && <span>🌐 IP: {log.sourceIp}</span>}
                       </div>
                     </div>
                   )
@@ -463,15 +445,15 @@ export default function AdminPage() {
               <div className={styles.roleHistoryList}>
                 {roleHistory.map((entry) => (
                   <div key={entry.id} className={styles.roleHistoryItem}>
-                    <div className={styles.roleHistoryUser}>{entry.user.fullName}</div>
+                    <div className={styles.roleHistoryUser}>👤 {entry.user.fullName}</div>
                     <div className={styles.roleHistoryDetail}>
-                      Role changed from <strong>{entry.oldRole}</strong> to <strong>{entry.newRole}</strong>
+                      🔄 Role changed from <strong>{entry.oldRole}</strong> to <strong>{entry.newRole}</strong>
                     </div>
                     <div className={styles.roleHistoryMeta}>
                       {entry.changedBy && (
-                        <span>By {entry.changedBy.fullName}</span>
+                        <span>✍️ By {entry.changedBy.fullName}</span>
                       )}
-                      <span>{formatDateTime(entry.changedAt)}</span>
+                      <span>🕒 {formatDateTime(entry.changedAt)}</span>
                     </div>
                   </div>
                 ))}

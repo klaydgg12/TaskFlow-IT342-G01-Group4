@@ -266,22 +266,6 @@ export default function Dashboard() {
           </div>
         </div>
         <div className={styles.headerRight}>
-          <button 
-            onClick={() => fetchTasks(currentUser.id)}
-            style={{
-              padding: '8px 16px',
-              backgroundColor: '#f3f4f6',
-              border: '1px solid #e5e7eb',
-              borderRadius: '6px',
-              cursor: 'pointer',
-              marginRight: '16px',
-              fontSize: '14px',
-              fontWeight: '500'
-            }}
-            title="Refresh tasks from database"
-          >
-            🔄 Refresh
-          </button>
           <div className={styles.userInfo}>
             <div className={styles.userName}>{currentUser.name}</div>
             <div className={styles.userRole}>
