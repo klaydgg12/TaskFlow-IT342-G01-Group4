@@ -10,113 +10,117 @@
 
 /* Header */
 .header {
-  background: white;
-  border-bottom: 0.8px solid #000;
-  padding: 0 16px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 86px;
-  box-sizing: border-box;
+  padding: 16px 24px;
+  background: white;
+  border-bottom: 0.8px solid #e5e7eb;
+  height: 80px;
 }
 
 .headerLeft {
   display: flex;
-  gap: 12px;
   align-items: center;
-}
-
-.logoContainer {
-  width: 40px;
-  height: 40px;
-  background: #4f39f6;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  gap: 16px;
 }
 
 .logo {
-  width: 24px;
-  height: 24px;
-  object-fit: contain;
-}
-
-.brandText {
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  gap: 12px;
 }
 
-.brandName {
+.logoIcon {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, #7c3aed 0%, #4f39f6 100%);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  color: white;
+  flex-shrink: 0;
+}
+
+.logoText {
   font-size: 20px;
-  font-weight: 600;
+  font-weight: 700;
   color: #101828;
-  line-height: 1.4;
+  line-height: 1.3;
 }
 
-.brandSubtitle {
+.logoSubtext {
   font-size: 16px;
-  font-weight: 400;
   color: #4a5565;
-  line-height: 1.5;
+  line-height: 1.3;
 }
 
 .headerRight {
   display: flex;
-  gap: 16px;
   align-items: center;
+  gap: 16px;
 }
 
 .userInfo {
   display: flex;
+  flex-direction: column;
   align-items: flex-end;
-  gap: 4px;
+  gap: 0;
 }
 
 .userName {
   font-size: 16px;
-  font-weight: 400;
+  font-weight: 500;
   color: #101828;
-  text-align: right;
+  line-height: 1.3;
 }
 
 .userRole {
   display: flex;
-  gap: 4px;
   align-items: center;
+  gap: 4px;
   font-size: 16px;
   color: #4a5565;
+  line-height: 1.3;
 }
 
-.roleIcon {
-  width: 12px;
-  height: 12px;
-  object-fit: contain;
+.userRoleIcon {
+  font-size: 12px;
 }
 
-.logoutBtn {
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  background: white;
-  border-radius: 8px;
-  padding: 0 12px;
-  height: 36px;
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #4f39f6 0%, #7c3aed 100%);
+  flex-shrink: 0;
+}
+
+.logoutButton {
   display: flex;
-  gap: 8px;
   align-items: center;
+  gap: 8px;
+  padding: 8px 12.8px;
+  background-color: #ffffff;
+  border: 0.8px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
   cursor: pointer;
   font-size: 14px;
+  font-weight: 500;
   color: #101828;
-  transition: all 0.2s ease;
+  transition: all 0.2s;
+  white-space: nowrap;
 }
 
-.logoutBtn:hover {
-  background: #f9fafb;
+.logoutButton:hover {
+  background-color: #f9fafb;
+  border-color: rgba(0, 0, 0, 0.2);
 }
 
-.logoutBtn img {
-  width: 16px;
-  height: 16px;
-  object-fit: contain;
+.logoutIcon {
+  font-size: 16px;
 }
 
 /* Main Content */
@@ -193,6 +197,10 @@
   width: 48px;
   height: 48px;
   border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
 }
 
 .iconPurple {
@@ -257,16 +265,16 @@
 }
 
 .panelHeader {
-  padding: 24px;
-  border-bottom: 1px solid #e5e7eb;
   display: flex;
   flex-direction: column;
   gap: 4px;
+  padding: 24px;
+  border-bottom: 1px solid #e5e7eb;
 }
 
 .panelTitle {
   font-size: 18px;
-  font-weight: 600;
+  font-weight: 400;
   color: #101828;
   margin: 0;
   line-height: 1.5;
@@ -280,12 +288,50 @@
   line-height: 1.5;
 }
 
+.panelActions {
+  display: flex;
+  gap: 8px;
+  padding: 0 24px;
+  height: 56px;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.refreshButton {
+  background: white;
+  border: 0.8px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  padding: 6px 12px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 400;
+  color: #101828;
+  transition: all 0.2s ease;
+}
+
+.refreshButton:hover {
+  background: #f9fafb;
+  border-color: #d1d5db;
+}
+
+.refreshButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 /* Table */
 .table {
   display: flex;
   flex-direction: column;
   flex: 1;
   overflow-y: auto;
+  border: 0.8px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.08);
 }
 
 .tableHeader {
@@ -308,7 +354,15 @@
   align-items: center;
   height: 100%;
   white-space: nowrap;
+  flex: 1;
 }
+
+.tableHeaderCell:nth-child(1) { flex: 2; } /* User column */
+.tableHeaderCell:nth-child(2) { flex: 2; } /* Email column */
+.tableHeaderCell:nth-child(3) { flex: 1; } /* Role column */
+.tableHeaderCell:nth-child(4) { flex: 1; } /* Status column */
+.tableHeaderCell:nth-child(5) { flex: 1; } /* Joined column */
+.tableHeaderCell:nth-child(6) { flex: 1; } /* Actions column */
 
 .tableBody {
   display: flex;
@@ -335,7 +389,15 @@
   font-size: 14px;
   color: #364153;
   height: 100%;
+  flex: 1;
 }
+
+.tableCell:nth-child(1) { flex: 2; } /* User column */
+.tableCell:nth-child(2) { flex: 2; } /* Email column */
+.tableCell:nth-child(3) { flex: 1; } /* Role column */
+.tableCell:nth-child(4) { flex: 1; } /* Status column */
+.tableCell:nth-child(5) { flex: 1; } /* Joined column */
+.tableCell:nth-child(6) { flex: 1; } /* Actions column */
 
 .userCell {
   display: flex;
@@ -376,6 +438,9 @@
   font-size: 14px;
   font-weight: 400;
   color: #364153;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .roleSelect {
@@ -390,8 +455,14 @@
   color: #0a0a0a;
   height: 32px;
   width: 100%;
-  max-width: 140px;
   cursor: pointer;
+  transition: all 0.2s ease;
+  max-width: 140px;
+}
+
+.roleSelect:hover {
+  background: #e5e7eb;
+  border-color: #4f39f6;
 }
 
 .roleDropdown {
@@ -406,20 +477,22 @@
   cursor: pointer;
 }
 
-.roleSelect img {
-  width: 14px;
-  height: 14px;
-  object-fit: contain;
+.roleSelect span:first-child {
+  flex-shrink: 0;
+  font-size: 14px;
 }
 
-.roleSelect img:first-child {
+.roleSelect span:last-child {
   flex-shrink: 0;
+  font-size: 10px;
+  color: #6b7280;
 }
 
 .date {
   font-size: 14px;
   font-weight: 400;
   color: #4a5565;
+  white-space: nowrap;
 }
 
 .statusBadge {
@@ -460,17 +533,12 @@
   font-weight: 400;
   transition: all 0.2s ease;
   white-space: nowrap;
+  min-width: 120px;
 }
 
 .actionButton:hover {
   background: #f9fafb;
   border-color: #d1d5db;
-}
-
-.actionButton img {
-  width: 14px;
-  height: 14px;
-  object-fit: contain;
 }
 
 .deactivateBtn {
@@ -504,6 +572,8 @@
   flex-direction: column;
   gap: 12px;
   padding: 24px;
+  max-height: 400px;
+  overflow-y: auto;
 }
 
 .auditItem {
@@ -584,6 +654,8 @@
   flex-direction: column;
   gap: 12px;
   padding: 24px;
+  max-height: 400px;
+  overflow-y: auto;
 }
 
 .roleHistoryItem {
@@ -613,4 +685,42 @@
   display: flex;
   gap: 12px;
   flex-wrap: wrap;
+}
+
+.brandSubtitle {
+  font-size: 16px;
+  font-weight: 400;
+  color: #4a5565;
+  line-height: 1.5;
+}
+
+.roleIcon {
+  width: 12px;
+  height: 12px;
+  object-fit: contain;
+}
+
+.logoutBtn {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: white;
+  border-radius: 8px;
+  padding: 0 12px;
+  height: 36px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  cursor: pointer;
+  font-size: 14px;
+  color: #101828;
+  transition: all 0.2s ease;
+}
+
+.logoutBtn:hover {
+  background: #f9fafb;
+}
+
+.logoutBtn img {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
 }

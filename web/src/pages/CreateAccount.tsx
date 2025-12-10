@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import styles from '@/styles/CreateAccount.module.css'
-import { API_BASE } from '@/config/api'
+import styles from '../styles/CreateAccount.module.css'
+import { API_BASE } from '../config/api'
 import { GoogleLogin, CredentialResponse } from '@react-oauth/google'
 
 // Figma asset URLs
@@ -170,7 +170,7 @@ export default function CreateAccount() {
                   Full Name
                 </label>
                 <div className={styles.inputWrapper}>
-                  <img alt="Name icon" className={styles.inputIcon} src={imgIcon1} data-node-id="3:5566" />
+                  <span className={styles.inputIcon}>👤</span>
                   <input
                     type="text"
                     name="fullName"
@@ -189,7 +189,7 @@ export default function CreateAccount() {
                   Email Address
                 </label>
                 <div className={styles.inputWrapper}>
-                  <img alt="Email icon" className={styles.inputIcon} src={imgIcon2} data-node-id="3:5575" />
+                  <span className={styles.inputIcon}>📧</span>
                   <input
                     type="email"
                     name="email"
@@ -208,7 +208,7 @@ export default function CreateAccount() {
                   Password
                 </label>
                 <div className={styles.inputWrapper}>
-                  <img alt="Password icon" className={styles.inputIcon} src={imgIcon3} data-node-id="3:5584" />
+                  <span className={styles.inputIcon}>🔒</span>
                   <input
                     type="password"
                     name="password"
@@ -227,7 +227,7 @@ export default function CreateAccount() {
                   Confirm Password
                 </label>
                 <div className={styles.inputWrapper}>
-                  <img alt="Password icon" className={styles.inputIcon} src={imgIcon3} data-node-id="3:5593" />
+                  <span className={styles.inputIcon}>🔒</span>
                   <input
                     type="password"
                     name="confirmPassword"
@@ -249,19 +249,14 @@ export default function CreateAccount() {
               {/* Submit Button */}
               <button type="submit" className={styles.submitButton} disabled={loading} data-node-id="3:5596">
                 <span>{loading ? 'Creating Account...' : 'Create Account'}</span>
-                {!loading && <img alt="Arrow" className={styles.submitIcon} src={imgIcon4} data-node-id="3:5598" />}
+                {!loading && <span className={styles.submitIcon}>→</span>}
               </button>
             </form>
 
             {/* Features Box */}
             <div className={styles.featuresBox} data-node-id="3:5601">
               <div className={styles.featuresTitle} data-node-id="3:5602">
-                <img
-                  alt="Features icon"
-                  className={styles.featuresIcon}
-                  src={imgIcon5}
-                  data-node-id="3:5603"
-                />
+                <span className={styles.featuresIcon}>✨</span>
                 <span>What you get with TaskFlow</span>
               </div>
               <div className={styles.featuresList} data-node-id="3:5609">

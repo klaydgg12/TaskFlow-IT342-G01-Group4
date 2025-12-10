@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import styles from '@/styles/SignIn.module.css'
-import { API_BASE } from '@/config/api'
 import { GoogleLogin, CredentialResponse } from '@react-oauth/google'
+import styles from '../styles/SignIn.module.css'
+import { API_BASE } from '../config/api'
 
 // Figma asset URLs
 const imgIcon = 'https://www.figma.com/api/mcp/asset/b9d9fdb3-ca10-42ee-bc7c-491dcf79baa3'
@@ -113,7 +113,7 @@ export default function SignIn() {
       <div className={styles.mainContent}>
         <div className={styles.headerSection}>
           <div className={styles.iconContainer}>
-            <img alt="TaskFlow icon" className={styles.icon} src={imgIcon} />
+            <div className={styles.icon}>📋</div>
           </div>
           <p className={styles.headerTitle}>TaskFlow</p>
           <p className={styles.headerSubtitle}>Sign in to keep your tasks organized and your team aligned.</p>
@@ -146,7 +146,7 @@ export default function SignIn() {
               <div className={styles.formGroup}>
                 <label className={styles.label}>Email Address</label>
                 <div className={styles.inputWrapper}>
-                  <img alt="Email icon" className={styles.inputIcon} src={imgIcon1} />
+                  <span className={styles.inputIcon}>📧</span>
                   <input
                     type="email"
                     name="email"
@@ -161,7 +161,7 @@ export default function SignIn() {
               <div className={styles.formGroup}>
                 <label className={styles.label}>Password</label>
                 <div className={styles.inputWrapper}>
-                  <img alt="Password icon" className={styles.inputIcon} src={imgIcon2} />
+                  <span className={styles.inputIcon}>🔒</span>
                   <input
                     type="password"
                     name="password"
@@ -181,13 +181,13 @@ export default function SignIn() {
 
               <button type="submit" className={styles.submitButton} disabled={loading}>
                 <span>{loading ? 'Signing In...' : 'Sign In'}</span>
-                {!loading && <img alt="Arrow" className={styles.submitIcon} src={imgIcon4} />}
+                {!loading && <span className={styles.submitIcon}>→</span>}
               </button>
             </form>
 
             <div className={styles.securityBox}>
               <div className={styles.securityTitle}>
-                <img alt="Security icon" className={styles.securityIcon} src={imgIcon3} />
+                <span className={styles.securityIcon}>🛡️</span>
                 <span>Secure authentication</span>
               </div>
               <div className={styles.securityItems}>
