@@ -70,6 +70,10 @@ public class AuditLogService {
         return auditLogRepository.findTop100ByOrderByCreatedAtDesc();
     }
 
+    public List<AuditLog> getAllAuditLogs() {
+        return auditLogRepository.findAllByOrderByCreatedAtDesc();
+    }
+
     public List<UserRoleHistory> getRecentRoleHistory() {
         return userRoleHistoryRepository.findTop100ByOrderByChangedAtDesc();
     }

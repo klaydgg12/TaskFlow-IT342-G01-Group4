@@ -27,9 +27,11 @@ interface AuditLog {
   id: number
   action: string
   entityType: string
-  entityId: number
+  entityId: number | null
   description: string
-  sourceIp?: string
+  oldValue: string | null
+  newValue: string | null
+  sourceIp: string | null
   createdAt: string
   user: {
     id: number
@@ -201,6 +203,10 @@ export default function AdminPage() {
         return { label: 'User Reactivated', style: styles.badgeBlue }
       case 'TASK_CREATED':
         return { label: 'Task Created', style: styles.badgeIndigo }
+      case 'TASK_UPDATED':
+        return { label: 'Task Updated', style: styles.badgeBlue }
+      case 'TASK_DELETED':
+        return { label: 'Task Deleted', style: styles.badgeRed }
       default:
         return { label: action, style: styles.badgeNeutral }
     }
@@ -414,9 +420,26 @@ export default function AdminPage() {
                       </div>
                       <div className={styles.auditDescription}>📝 {log.description}</div>
                       <div className={styles.auditMeta}>
-                        <span>👤 User: <strong>{log.user.fullName}</strong></span>
+                        <span>👤 User: <strong>{log.user.fullName}</strong> ({log.user.email})</span>
+                        {log.entityType && log.entityId && (
+                          <span>📦 {log.entityType} ID: {log.entityId}</span>
+                        )}
                         {log.sourceIp && <span>🌐 IP: {log.sourceIp}</span>}
                       </div>
+                      {(log.oldValue || log.newValue) && (
+                        <div className={styles.auditChanges}>
+                          {log.oldValue && (
+                            <div className={styles.auditOldValue}>
+                              <strong>Old:</strong> {log.oldValue}
+                            </div>
+                          )}
+                          {log.newValue && (
+                            <div className={styles.auditNewValue}>
+                              <strong>New:</strong> {log.newValue}
+                            </div>
+                          )}
+                        </div>
+                      )}
                     </div>
                   )
                 })}

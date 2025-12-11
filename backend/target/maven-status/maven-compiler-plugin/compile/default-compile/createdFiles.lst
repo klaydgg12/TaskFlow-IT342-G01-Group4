@@ -10,6 +10,7 @@ com\taskflow\entity\AuditLog.class
 com\taskflow\repository\AuditLogRepository.class
 com\taskflow\dto\GoogleSignInRequest.class
 com\taskflow\dto\GoogleUserPayload$GoogleUserPayloadBuilder.class
+com\taskflow\controller\AuthController.class
 com\taskflow\controller\UserController.class
 com\taskflow\repository\UserRoleHistoryRepository.class
 com\taskflow\controller\TaskController.class
@@ -17,6 +18,7 @@ com\taskflow\TaskFlowApplication.class
 com\taskflow\dto\GoogleUserPayload.class
 com\taskflow\dto\TaskRequest.class
 com\taskflow\entity\UserRoleHistory.class
+com\taskflow\security\JwtUtil.class
 com\taskflow\config\DataInitializer.class
 com\taskflow\entity\ActivityLog.class
 com\taskflow\repository\TaskRepository.class
