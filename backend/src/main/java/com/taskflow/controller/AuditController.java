@@ -23,25 +23,27 @@ public class AuditController {
 
     @GetMapping("/logs")
     public ResponseEntity<?> getAuditLogs() {
-        List<Map<String, Object>> logs = auditLogService.getRecentAuditLogs().stream()
-                .map(log -> Map.<String, Object>of(
-                        "id", log.getId(),
-                        "action", log.getAction(),
-                        "entityType", log.getEntityType(),
-                        "entityId", log.getEntityId(),
-                        "description", log.getDescription(),
-                        "oldValue", log.getOldValue(),
-                        "newValue", log.getNewValue(),
-                        "sourceIp", log.getSourceIp(),
-                        "createdAt", log.getCreatedAt(),
-                        "user", Map.<String, Object>of(
-                                "id", log.getUser().getId(),
-                                "fullName", log.getUser().getFullName(),
-                                "email", log.getUser().getEmail()
-                        )
-                ))
+        List<Map<String, Object>> logs = auditLogService.getAllAuditLogs().stream()
+                .map(log -> {
+                    Map<String, Object> logMap = new java.util.HashMap<>();
+                    logMap.put("id", log.getId());
+                    logMap.put("action", log.getAction() != null ? log.getAction() : "");
+                    logMap.put("entityType", log.getEntityType() != null ? log.getEntityType() : "");
+                    logMap.put("entityId", log.getEntityId() != null ? log.getEntityId() : null);
+                    logMap.put("description", log.getDescription() != null ? log.getDescription() : "");
+                    logMap.put("oldValue", log.getOldValue() != null ? log.getOldValue() : null);
+                    logMap.put("newValue", log.getNewValue() != null ? log.getNewValue() : null);
+                    logMap.put("sourceIp", log.getSourceIp() != null ? log.getSourceIp() : null);
+                    logMap.put("createdAt", log.getCreatedAt() != null ? log.getCreatedAt().toString() : null);
+                    logMap.put("user", Map.<String, Object>of(
+                            "id", log.getUser().getId(),
+                            "fullName", log.getUser().getFullName(),
+                            "email", log.getUser().getEmail()
+                    ));
+                    return logMap;
+                })
                 .collect(Collectors.toList());
-        return ResponseEntity.ok(Map.of("success", true, "logs", logs));
+        return ResponseEntity.ok(Map.of("success", true, "logs", logs, "total", logs.size()));
     }
 
     @GetMapping("/role-history")

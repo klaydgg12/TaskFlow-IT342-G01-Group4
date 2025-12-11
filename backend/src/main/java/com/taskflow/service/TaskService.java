@@ -72,15 +72,66 @@ public class TaskService {
         return taskRepository.findAll();
     }
 
-    public Task updateTask(Long id, TaskRequest request) {
-        Task task = taskRepository.findById(id)
+    public Task updateTask(Long id, TaskRequest request, String sourceIp) {
+        Task existingTask = taskRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Task not found"));
-        applyTaskRequest(task, request);
-        return taskRepository.save(task);
+        
+        // Store old values for audit log
+        String oldStatus = existingTask.getStatus();
+        String oldTitle = existingTask.getTitle();
+        String oldPriority = existingTask.getPriority();
+        Long creatorId = existingTask.getCreatedById();
+        
+        applyTaskRequest(existingTask, request);
+        Task saved = taskRepository.save(existingTask);
+        
+        // Log the update action - use the task's creator or the request's creator if provided
+        Long userIdToLog = request.getCreatedById() != null ? request.getCreatedById() : creatorId;
+        if (userIdToLog != null) {
+            userRepository.findById(userIdToLog).ifPresent(user -> {
+                String description = "Updated task: " + saved.getTitle();
+                String oldValue = String.format("Status: %s, Priority: %s", oldStatus, oldPriority);
+                String newValue = String.format("Status: %s, Priority: %s", saved.getStatus(), saved.getPriority());
+                
+                // If title changed, include it
+                if (!oldTitle.equals(saved.getTitle())) {
+                    description += " (title changed from '" + oldTitle + "' to '" + saved.getTitle() + "')";
+                }
+                
+                auditLogService.logAction(
+                        user,
+                        "TASK_UPDATED",
+                        "TASK",
+                        saved.getId(),
+                        description,
+                        oldValue,
+                        newValue,
+                        sourceIp);
+            });
+        }
+        
+        return saved;
     }
 
-    public void deleteTask(Long id) {
+    public void deleteTask(Long id, Long userId, String sourceIp) {
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Task not found"));
+        
+        String taskTitle = task.getTitle();
         taskRepository.deleteById(id);
+        
+        // Log the delete action
+        if (userId != null) {
+            userRepository.findById(userId).ifPresent(user -> auditLogService.logAction(
+                    user,
+                    "TASK_DELETED",
+                    "TASK",
+                    id,
+                    "Deleted task: " + taskTitle,
+                    String.format("Title: %s, Status: %s, Priority: %s", taskTitle, task.getStatus(), task.getPriority()),
+                    null,
+                    sourceIp));
+        }
     }
 
     public List<Task> getTasksByUserAndStatus(Long userId, String status) {

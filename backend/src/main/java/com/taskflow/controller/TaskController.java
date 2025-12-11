@@ -92,9 +92,9 @@ public class TaskController {
     }
 
     @PostMapping("/update/{id}")
-    public ResponseEntity<?> updateTask(@PathVariable Long id, @RequestBody TaskRequest request) {
+    public ResponseEntity<?> updateTask(@PathVariable Long id, @RequestBody TaskRequest request, HttpServletRequest httpServletRequest) {
         try {
-            Task task = taskService.updateTask(id, request);
+            Task task = taskService.updateTask(id, request, getClientIp(httpServletRequest));
             return ResponseEntity.ok(Map.of(
                     "success", true,
                     "message", "Task updated successfully",
@@ -107,9 +107,29 @@ public class TaskController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteTask(@PathVariable Long id) {
+    public ResponseEntity<?> deleteTask(@PathVariable Long id, HttpServletRequest httpServletRequest) {
         try {
-            taskService.deleteTask(id);
+            // Extract userId from request body or header if needed
+            // For now, we'll try to get it from the request body if sent
+            Long userId = null;
+            try {
+                String userIdStr = httpServletRequest.getHeader("X-User-Id");
+                if (userIdStr != null) {
+                    userId = Long.parseLong(userIdStr);
+                }
+            } catch (Exception e) {
+                // If not provided, we'll try to get from task's createdById
+            }
+            
+            // If userId not in header, get from task before deletion
+            if (userId == null) {
+                var taskOpt = taskService.getTaskById(id);
+                if (taskOpt.isPresent()) {
+                    userId = taskOpt.get().getCreatedById();
+                }
+            }
+            
+            taskService.deleteTask(id, userId, getClientIp(httpServletRequest));
             return ResponseEntity.ok(Map.of(
                     "success", true,
                     "message", "Task deleted successfully"));

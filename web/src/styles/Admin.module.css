@@ -649,6 +649,37 @@
   color: #6b7280;
 }
 
+.auditChanges {
+  margin-top: 8px;
+  padding: 12px;
+  background: #f9fafb;
+  border-radius: 8px;
+  border-left: 3px solid #e5e7eb;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.auditOldValue {
+  font-size: 0.85rem;
+  color: #991b1b;
+  padding: 4px 0;
+}
+
+.auditOldValue strong {
+  color: #7f1d1d;
+}
+
+.auditNewValue {
+  font-size: 0.85rem;
+  color: #047857;
+  padding: 4px 0;
+}
+
+.auditNewValue strong {
+  color: #065f46;
+}
+
 .roleHistoryList {
   display: flex;
   flex-direction: column;
