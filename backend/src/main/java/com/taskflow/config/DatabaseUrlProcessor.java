@@ -34,9 +34,9 @@ public class DatabaseUrlProcessor implements EnvironmentPostProcessor {
             if (databaseUrl.startsWith("jdbc:")) {
                 System.out.println("DATABASE_URL already in JDBC format, using as-is");
                 jdbcUrl = databaseUrl;
-            } else if (databaseUrl.startsWith("mysql://")) {
-                System.out.println("Converting DATABASE_URL from mysql:// to jdbc:mysql://");
-                Map<String, String> result = convertRenderUrlToJdbc(databaseUrl);
+            } else if (databaseUrl.startsWith("postgresql://") || databaseUrl.startsWith("postgres://")) {
+                System.out.println("Converting DATABASE_URL from postgresql:// to jdbc:postgresql://");
+                Map<String, String> result = convertPostgresUrlToJdbc(databaseUrl);
                 jdbcUrl = result.get("url");
                 username = result.get("username");
                 password = result.get("password");
@@ -49,10 +49,10 @@ public class DatabaseUrlProcessor implements EnvironmentPostProcessor {
                 System.out.println("SPRING_DATASOURCE_URL already in JDBC format");
                 jdbcUrl = springDatasourceUrl;
             }
-            // If it's in mysql:// format, convert it
-            else if (springDatasourceUrl.startsWith("mysql://")) {
-                System.out.println("Converting SPRING_DATASOURCE_URL from mysql:// to jdbc:mysql://");
-                Map<String, String> result = convertRenderUrlToJdbc(springDatasourceUrl);
+            // If it's in postgresql:// format, convert it
+            else if (springDatasourceUrl.startsWith("postgresql://") || springDatasourceUrl.startsWith("postgres://")) {
+                System.out.println("Converting SPRING_DATASOURCE_URL from postgresql:// to jdbc:postgresql://");
+                Map<String, String> result = convertPostgresUrlToJdbc(springDatasourceUrl);
                 jdbcUrl = result.get("url");
                 username = result.get("username");
                 password = result.get("password");
@@ -83,13 +83,13 @@ public class DatabaseUrlProcessor implements EnvironmentPostProcessor {
         }
     }
 
-    private Map<String, String> convertRenderUrlToJdbc(String renderUrl) {
+    private Map<String, String> convertPostgresUrlToJdbc(String renderUrl) {
         Map<String, String> result = new HashMap<>();
         
         try {
-            // Render format: mysql://user:password@host:port/dbname
-            // Convert to: jdbc:mysql://host:port/dbname
-            String urlWithoutProtocol = renderUrl.replace("mysql://", "");
+            // Render format: postgresql://user:password@host:port/dbname
+            // Convert to: jdbc:postgresql://host:port/dbname
+            String urlWithoutProtocol = renderUrl.replace("postgresql://", "").replace("postgres://", "");
             int atIndex = urlWithoutProtocol.indexOf('@');
             
             if (atIndex > 0) {
@@ -121,17 +121,17 @@ public class DatabaseUrlProcessor implements EnvironmentPostProcessor {
                 
                 int portColonIndex = hostPort.lastIndexOf(':');
                 String host = portColonIndex > 0 ? hostPort.substring(0, portColonIndex) : hostPort;
-                String port = portColonIndex > 0 ? hostPort.substring(portColonIndex + 1) : "3306";
+                String port = portColonIndex > 0 ? hostPort.substring(portColonIndex + 1) : "5432";
                 
-                // Construct JDBC URL
-                String jdbcUrl = String.format("jdbc:mysql://%s:%s/%s?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=UTF-8",
+                // Construct JDBC URL for PostgreSQL
+                String jdbcUrl = String.format("jdbc:postgresql://%s:%s/%s",
                     host, port, dbName);
                 
                 result.put("url", jdbcUrl);
                 result.put("username", user);
                 result.put("password", pass);
                 
-                System.out.println("Converted URL - Host: " + host + ", Port: " + port + ", DB: " + dbName);
+                System.out.println("Converted PostgreSQL URL - Host: " + host + ", Port: " + port + ", DB: " + dbName);
             } else {
                 // No @ symbol, might be a different format
                 System.err.println("Warning: Could not parse database URL format: " + maskPassword(renderUrl));
