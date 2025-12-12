@@ -3,7 +3,7 @@ services:
     name: taskflow-backend
     env: docker
     dockerfilePath: ./backend/Dockerfile
-    dockerContext: ./backend
+    dockerContext: .
     envVars:
       - key: SPRING_DATASOURCE_URL
         sync: false
