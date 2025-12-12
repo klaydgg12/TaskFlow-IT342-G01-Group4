@@ -6,18 +6,23 @@ services:
     dockerContext: .
     envVars:
       - key: SPRING_DATASOURCE_URL
-        sync: false
+        fromDatabase:
+          name: taskflowdb
+          property: connectionString
       - key: SPRING_DATASOURCE_USERNAME
-        sync: false
+        fromDatabase:
+          name: taskflowdb
+          property: user
       - key: SPRING_DATASOURCE_PASSWORD
-        sync: false
+        fromDatabase:
+          name: taskflowdb
+          property: password
       - key: GOOGLE_OAUTH_CLIENT_ID
         sync: false
       - key: JWT_SECRET
-        sync: false
-      - key: SERVER_PORT
+        generateValue: true
+      - key: PORT
         value: 8080
-    healthCheckPath: /actuator/health
 
 databases:
   - name: taskflowdb
