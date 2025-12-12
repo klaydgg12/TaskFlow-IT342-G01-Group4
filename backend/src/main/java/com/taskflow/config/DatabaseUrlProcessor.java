@@ -9,15 +9,19 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Iterator;
 
 public class DatabaseUrlProcessor implements EnvironmentPostProcessor {
 
     @Override
     public void postProcessEnvironment(ConfigurableEnvironment environment, SpringApplication application) {
+        // Log all database-related environment variables for debugging
+        System.out.println("=== Database URL Processor STARTING ===");
+        System.out.println("Checking environment variables...");
+        
         String databaseUrl = environment.getProperty("DATABASE_URL");
         String springDatasourceUrl = environment.getProperty("SPRING_DATASOURCE_URL");
         
-        System.out.println("=== Database URL Processor ===");
         System.out.println("DATABASE_URL: " + (databaseUrl != null ? maskPassword(databaseUrl) : "null"));
         System.out.println("SPRING_DATASOURCE_URL: " + (springDatasourceUrl != null ? maskPassword(springDatasourceUrl) : "null"));
         
@@ -25,29 +29,34 @@ public class DatabaseUrlProcessor implements EnvironmentPostProcessor {
         String username = null;
         String password = null;
         
-        // Check SPRING_DATASOURCE_URL first (from render.yaml)
-        if (springDatasourceUrl != null && !springDatasourceUrl.isEmpty()) {
+        // Check DATABASE_URL first (Render's standard env var - most reliable)
+        if (databaseUrl != null && !databaseUrl.isEmpty()) {
+            if (databaseUrl.startsWith("jdbc:")) {
+                System.out.println("DATABASE_URL already in JDBC format, using as-is");
+                jdbcUrl = databaseUrl;
+            } else if (databaseUrl.startsWith("mysql://")) {
+                System.out.println("Converting DATABASE_URL from mysql:// to jdbc:mysql://");
+                Map<String, String> result = convertRenderUrlToJdbc(databaseUrl);
+                jdbcUrl = result.get("url");
+                username = result.get("username");
+                password = result.get("password");
+            }
+        }
+        // Fallback to SPRING_DATASOURCE_URL if DATABASE_URL not available
+        else if (springDatasourceUrl != null && !springDatasourceUrl.isEmpty()) {
             // If it's already in JDBC format, use it
             if (springDatasourceUrl.startsWith("jdbc:")) {
                 System.out.println("SPRING_DATASOURCE_URL already in JDBC format");
-                return; // Already correct format
+                jdbcUrl = springDatasourceUrl;
             }
             // If it's in mysql:// format, convert it
-            if (springDatasourceUrl.startsWith("mysql://")) {
+            else if (springDatasourceUrl.startsWith("mysql://")) {
                 System.out.println("Converting SPRING_DATASOURCE_URL from mysql:// to jdbc:mysql://");
                 Map<String, String> result = convertRenderUrlToJdbc(springDatasourceUrl);
                 jdbcUrl = result.get("url");
                 username = result.get("username");
                 password = result.get("password");
             }
-        }
-        // Check DATABASE_URL (Render's standard env var)
-        else if (databaseUrl != null && !databaseUrl.isEmpty() && databaseUrl.startsWith("mysql://")) {
-            System.out.println("Converting DATABASE_URL from mysql:// to jdbc:mysql://");
-            Map<String, String> result = convertRenderUrlToJdbc(databaseUrl);
-            jdbcUrl = result.get("url");
-            username = result.get("username");
-            password = result.get("password");
         }
         
         // If we have a converted URL, set it

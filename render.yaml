@@ -5,24 +5,14 @@ services:
     dockerfilePath: ./backend/Dockerfile
     dockerContext: .
     envVars:
-      - key: SPRING_DATASOURCE_URL
+      - key: DATABASE_URL
         fromDatabase:
           name: taskflowdb
           property: connectionString
-      - key: SPRING_DATASOURCE_USERNAME
-        fromDatabase:
-          name: taskflowdb
-          property: user
-      - key: SPRING_DATASOURCE_PASSWORD
-        fromDatabase:
-          name: taskflowdb
-          property: password
       - key: GOOGLE_OAUTH_CLIENT_ID
         sync: false
       - key: JWT_SECRET
         generateValue: true
-      - key: PORT
-        value: 8080
 
 databases:
   - name: taskflowdb
